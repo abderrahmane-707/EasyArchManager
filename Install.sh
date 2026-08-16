@@ -266,7 +266,7 @@ run_programs() {
     printf '    - %s\n' "${to_install[@]}"
     echo
 
-    pkg_install "${to_install[@]}"
+    pkg_install "${to_install[@]}" || true
     go_done
     deselect_all_progs
 }
