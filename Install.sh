@@ -110,7 +110,7 @@ init_names() {
 
     # --- Archive & Compression Tools ---
     NAME[12]="7zip"
-    NAME[13]="peazip-qt-bin"
+    NAME[13]="peazip"
 
     # --- Downloaders & Network Tools ---
     NAME[14]="aria2"
