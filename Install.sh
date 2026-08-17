@@ -93,75 +93,80 @@ pkg_remove() {
 init_names() {
     # --- Web Browsers ---
     NAME[1]="firefox"
-    NAME[2]="google-chrome"
+    NAME[2]="librewolf"
     NAME[3]="brave-bin"
     NAME[4]="chromium"
+    NAME[5]="google-chrome"
 
     # --- Media Players & Viewers ---
-    NAME[5]="mpv"
     NAME[6]="vlc"
-    NAME[7]="qview"
+    NAME[7]="mpv"
+    NAME[8]="qview"
 
     # --- Office & Document Viewers ---
-    NAME[8]="okular"
-    NAME[9]="onlyoffice-bin"
+    NAME[9]="okular"
+    NAME[10]="onlyoffice-bin"
+    NAME[11]="libreoffice-fresh"
 
     # --- Archive & Compression Tools ---
-    NAME[10]="7zip"
-    NAME[11]="peazip-qt-bin"
-
-    # --- Code & Text Editors ---
-    NAME[12]="neovim"
-    NAME[13]="micro"
-    NAME[14]="code"
-
-    # --- Compilers & Binary Toolchains ---
-    NAME[15]="gcc"
-    NAME[16]="clang"
-    NAME[17]="binutils"
-
-    # --- Debuggers, Static Analysis & Memory Profilers ---
-    NAME[18]="gdb"
-    NAME[19]="lldb"
-    NAME[20]="valgrind"
-    NAME[21]="cppcheck"
-
-    # --- Build Systems & Automation ---
-    NAME[22]="make"
-    NAME[23]="cmake"
-    NAME[24]="ninja"
-
-    # --- Version Control (Git Tools) ---
-    NAME[25]="git"
-    NAME[26]="sourcegit-bin"
-
-    # --- CLI File Managers, Search & Navigation Utilities ---
-    NAME[27]="ripgrep"
-    NAME[28]="fd"
-    NAME[29]="fzf"
-    NAME[30]="zoxide"
-    NAME[31]="yazi"
-
-    # --- Modern Terminal Substitutes & Utilities ---
-    NAME[32]="bat"
-    NAME[33]="eza"
-    NAME[34]="tree"
-    NAME[35]="tldr"
-
-    # --- System Monitoring, Power & Disk Analytics ---
-    NAME[36]="btop"
-    NAME[37]="duf"
-    NAME[38]="dust"
-    NAME[39]="powertop"
-
-    # --- System Info & Benchmarking ---
-    NAME[40]="fastfetch"
-    NAME[41]="hyperfine"
+    NAME[12]="7zip"
+    NAME[13]="peazip-qt-bin"
 
     # --- Downloaders & Network Tools ---
-    NAME[42]="aria2"
-    NAME[43]="yt-dlp"
-    NAME[44]="freedownloadmanager"
+    NAME[14]="aria2"
+    NAME[15]="yt-dlp"
+    NAME[16]="freedownloadmanager"
+
+    # --- Code & Text Editors ---
+    NAME[17]="code"
+    NAME[18]="neovim"
+    NAME[19]="micro"
+
+    # --- CLI File Managers, Search & Navigation Utilities ---
+    NAME[20]="ripgrep"
+    NAME[21]="fd"
+    NAME[22]="fzf"
+    NAME[23]="zoxide"
+    NAME[24]="yazi"
+
+    # --- Modern Terminal Substitutes & Utilities ---
+    NAME[25]="bat"
+    NAME[26]="eza"
+    NAME[27]="tree"
+    NAME[28]="tldr"
+    NAME[29]="navi"
+    NAME[30]="pacman-contrib"
+
+    # --- System Monitoring, Power & Disk Analytics ---
+    NAME[31]="btop"
+    NAME[32]="duf"
+    NAME[33]="dust"
+    NAME[34]="powertop"
+
+    # --- System Info & Benchmarking ---
+    NAME[35]="fastfetch"
+    NAME[36]="hyperfine"
+
+    # --- Version Control (Git Tools) ---
+    NAME[37]="git"
+    NAME[38]="github-cli"
+    NAME[39]="sourcegit-bin"
+
+    # --- Build Systems & Automation ---
+    NAME[40]="make"
+    NAME[41]="cmake"
+    NAME[42]="ninja"
+
+    # --- Compilers & Binary Toolchains ---
+    NAME[43]="gcc"
+    NAME[44]="clang"
+    NAME[45]="binutils"
+
+    # --- Debuggers, Static Analysis & Memory Profilers ---
+    NAME[46]="gdb"
+    NAME[47]="lldb"
+    NAME[48]="valgrind"
+    NAME[49]="cppcheck"
 
     deselect_all_progs
 }
