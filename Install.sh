@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+
 set -euo pipefail
 
 declare -a NAME
@@ -13,7 +13,7 @@ is_yay_installed() {
 
 install_yay() {
     clear
-    echo "yay is not installed on this system"
+    echo "yay is not installed"
     read -rp "Do you want to install it? [Y/n]: " ans || true
     case "${ans,,}" in
         y|yes)
@@ -45,6 +45,7 @@ install_yay() {
             fi
             ;;
         *)
+            echo
             echo "yay installation cancelled"
             pause
             return 1
@@ -171,21 +172,21 @@ init_names() {
     deselect_all_progs
 }
 
-prog_count() {
+pkg_count() {
     echo "${#NAME[@]}"
 }
 
-deselect_all_progs() {
+deselect_all_pkg() {
     local count
-    count=$(prog_count)
+    count=$(pkg_count)
     for ((i = 1; i <= count; i++)); do
         SELECTED[i]=0
     done
 }
 
-select_all_progs() {
+select_all_pkg() {
     local count
-    count=$(prog_count)
+    count=$(pkg_count)
     for ((i = 1; i <= count; i++)); do
         SELECTED[i]=1
     done
@@ -210,10 +211,10 @@ go_done() {
     pause
 }
 
-multi_input_progs() {
+multi_input_pkg() {
     local choice="$1"
     local count
-    count=$(prog_count)
+    count=$(pkg_count)
     local invalid=""
     local tokens
     tokens="${choice//,/ }"
@@ -249,10 +250,10 @@ multi_input_progs() {
     fi
 }
 
-run_programs() {
+run_pkg() {
     clear
     local count
-    count=$(prog_count)
+    count=$(pkg_count)
     local to_install=()
 
     for ((i = 1; i <= count; i++)); do
@@ -262,7 +263,7 @@ run_programs() {
     done
 
     if [[ ${#to_install[@]} -eq 0 ]]; then
-        echo "No programs selected"
+        echo "No packages selected"
         pause
         return
     fi
@@ -273,7 +274,7 @@ run_programs() {
 
     pkg_install "${to_install[@]}" || true
     go_done
-    deselect_all_progs
+    deselect_all_pkg
 }
 
 update_menu() {
@@ -281,7 +282,7 @@ update_menu() {
     echo "Checking available updates..."
     pkg_update || true
     go_done
-    deselect_all_progs
+    deselect_all_pkg
 }
 
 remove_menu() {
@@ -309,15 +310,15 @@ remove_menu() {
     fi
 
     go_done
-    deselect_all_progs
+    deselect_all_pkg
 }
 
-more_prog() {
+more_pkg() {
     clear
 
     if ! command -v fzf >/dev/null 2>&1; then
         echo "fzf is required for interactive search but is not installed"
-        read -rp "Do you want to install fzf now? [Y/n]: " ans || true
+        read -rp "Do you want to install fzf? [Y/n]: " ans || true
         case "${ans,,}" in
             y|yes|"")
                 if ! pkg_install "fzf"; then
@@ -327,9 +328,7 @@ more_prog() {
                 fi
                 ;;
             *)
-                echo "Search cancelled"
-                pause
-                return 0
+                return 1
                 ;;
         esac
         clear
@@ -356,7 +355,7 @@ more_prog() {
 
     pkg_install "${to_install[@]}" || true
     go_done
-    deselect_all_progs
+    deselect_all_pkg
 }
 
 pacman_menu() {
@@ -374,7 +373,7 @@ EOF
 
 EOF
         local count
-        count=$(prog_count)
+        count=$(pkg_count)
         local rows=$(( (count + 2) / 3 ))
         [[ $rows -lt 1 ]] && rows=1
 
@@ -405,14 +404,14 @@ EOF
 
         cat <<'EOF'
 
-   [U] Update Programs
-   [R] Remove Programs
+   [U] Update Packages
+   [R] Remove Packages
    [M] More
    [P] Toggle (pacman/yay)
 
              ---------------------------------------------------------------------------
 
-                   [A] Select All             [D] Deselect All             [X] Exit
+                   [A] Select All            [D] Deselect All            [0] Exit
 
 EOF
         echo "Tip: You can select multiple items, e.g. 1,3,5 or 1-5 or 1-3,7,10-12"
@@ -422,18 +421,18 @@ EOF
         [[ -z "${choice:-}" ]] && continue
 
         case "${choice^^}" in
-            X) exit 0 ;;
-            S) run_programs ;;
-            A) select_all_progs ;;
-            D) deselect_all_progs ;;
+            0) exit 0 ;;
+            S) run_pkg ;;
+            A) select_all_pkg ;;
+            D) deselect_all_pkg ;;
             U) update_menu ;;
             R) remove_menu ;;
-            M) more_prog ;;
+            M) more_pkg ;;
             P) toggle_pkg_manager ;;
-            *) multi_input_progs "$choice" ;;
+            *) multi_input_pkg "$choice" ;;
         esac
     done
 }
 
-init_names
+init_pkg
 pacman_menu
