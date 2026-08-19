@@ -3,6 +3,7 @@
 set -euo pipefail
 
 declare -a NAME
+declare -a DISPLAY
 declare -a SELECTED
 
 PKG_MANAGER="pacman"
@@ -91,85 +92,87 @@ pkg_remove() {
     fi
 }
 
-init_names() {
-    # --- Web Browsers ---
-    NAME[1]="firefox"
-    NAME[2]="librewolf"
-    NAME[3]="brave-bin"
-    NAME[4]="chromium"
-    NAME[5]="google-chrome"
+add_pkg() {
+    local name="$1"
+    local display="$2"
+    local idx=$((${#NAME[@]} + 1))
+    NAME[idx]="$name"
+    DISPLAY[idx]="$display"
+}
 
-    # --- Media Players & Viewers ---
-    NAME[6]="vlc"
-    NAME[7]="mpv"
-    NAME[8]="qview"
+init_pkg() {
+    NAME=()
+    DISPLAY=()
 
-    # --- Office & Document Viewers ---
-    NAME[9]="okular"
-    NAME[10]="onlyoffice-bin"
-    NAME[11]="libreoffice-fresh"
+    # Web Browsers
+    add_pkg "firefox"             "Mozilla Firefox"
+    add_pkg "librewolf"           "LibreWolf"
+    add_pkg "brave-bin"           "Brave"
+    add_pkg "chromium"            "Chromium"
+    add_pkg "google-chrome"       "Google Chrome"
 
-    # --- Archive & Compression Tools ---
-    NAME[12]="7zip"
-    NAME[13]="peazip"
+    # Media Players & Viewers
+    add_pkg "vlc"                 "VLC media player"
+    add_pkg "mpv"                 "mpv"
+    add_pkg "qview"               "qView"
 
-    # --- Downloaders & Network Tools ---
-    NAME[14]="aria2"
-    NAME[15]="yt-dlp"
-    NAME[16]="freedownloadmanager"
+    # Office & Document Viewers
+    add_pkg "okular"              "KDE Okular"
+    add_pkg "onlyoffice-bin"      "OnlyOffice"
+    add_pkg "libreoffice-fresh"   "LibreOffice"
 
-    # --- Code & Text Editors ---
-    NAME[17]="code"
-    NAME[18]="neovim"
-    NAME[19]="micro"
+    # Archive & Compression Tools
+    add_pkg "7zip"                "7-Zip"
+    add_pkg "peazip"              "PeaZip"
 
-    # --- CLI File Managers, Search & Navigation Utilities ---
-    NAME[20]="ripgrep"
-    NAME[21]="fd"
-    NAME[22]="fzf"
-    NAME[23]="zoxide"
-    NAME[24]="yazi"
+    # Downloaders & Network Tools
+    add_pkg "aria2"               "aria2"
+    add_pkg "yt-dlp"              "yt-dlp"
+    add_pkg "freedownloadmanager" "FDM"
 
-    # --- Modern Terminal Substitutes & Utilities ---
-    NAME[25]="bat"
-    NAME[26]="eza"
-    NAME[27]="tree"
-    NAME[28]="tldr"
-    NAME[29]="navi"
-    NAME[30]="pacman-contrib"
+    # Code & Text Editors
+    add_pkg "code"                "VS Code"
+    add_pkg "neovim"              "Neovim"
+    add_pkg "micro"               "micro"
 
-    # --- System Monitoring, Power & Disk Analytics ---
-    NAME[31]="btop"
-    NAME[32]="duf"
-    NAME[33]="dust"
-    NAME[34]="powertop"
+    # CLI File Managers, Search & Navigation Utilities
+    add_pkg "ripgrep"             "ripgrep"
+    add_pkg "fd"                  "fd"
+    add_pkg "fzf"                 "fzf"
+    add_pkg "zoxide"              "zoxide"
+    add_pkg "yazi"                "Yazi"
 
-    # --- System Info & Benchmarking ---
-    NAME[35]="fastfetch"
-    NAME[36]="hyperfine"
+    # Modern Terminal Substitutes & Utilities
+    add_pkg "bat"                 "bat"
+    add_pkg "eza"                 "eza"
+    add_pkg "tree"                "Tree"
+    add_pkg "tldr"                "tldr"
+    add_pkg "navi"                "navi"
+    add_pkg "pacman-contrib"      "pacman-contrib"
 
-    # --- Version Control (Git Tools) ---
-    NAME[37]="git"
-    NAME[38]="github-cli"
-    NAME[39]="sourcegit-bin"
+    # System Monitoring, Power & Disk Analytics
+    add_pkg "btop"                "btop"
+    add_pkg "duf"                 "duf"
+    add_pkg "dust"                "dust"
+    add_pkg "powertop"            "PowerTOP"
 
-    # --- Build Systems & Automation ---
-    NAME[40]="make"
-    NAME[41]="cmake"
-    NAME[42]="ninja"
+    # System Info & Benchmarking
+    add_pkg "fastfetch"           "Fastfetch"
+    add_pkg "hyperfine"           "hyperfine"
 
-    # --- Compilers & Binary Toolchains ---
-    NAME[43]="gcc"
-    NAME[44]="clang"
-    NAME[45]="binutils"
+    # Version Control (Git Tools)
+    add_pkg "git"                 "Git"
+    add_pkg "github-cli"          "GitHub CLI"
+    add_pkg "sourcegit-bin"       "SourceGit"
 
-    # --- Debuggers, Static Analysis & Memory Profilers ---
-    NAME[46]="gdb"
-    NAME[47]="lldb"
-    NAME[48]="valgrind"
-    NAME[49]="cppcheck"
+    # Base Development Tools
+    add_pkg "base-devel"          "Base dev"
+    add_pkg "clang"               "Clang"
 
-    deselect_all_progs
+    # Debuggers, Static Analysis & Memory Profilers
+    add_pkg "cppcheck"            "Cppcheck"
+
+    deselect_all_pkg
 }
 
 pkg_count() {
@@ -387,17 +390,17 @@ EOF
             if ((c1 <= count)); then
                 mark=" "
                 [[ "${SELECTED[$c1]}" -eq 1 ]] && mark="*"
-                col1=$(printf "[%-2s] %-18s %s" "$c1" "${NAME[$c1]}" "$mark")
+                col1=$(printf "%s [%2s] %-18s" "$mark" "$c1" "${DISPLAY[$c1]}")
             fi
             if ((c2 <= count)); then
                 mark=" "
                 [[ "${SELECTED[$c2]}" -eq 1 ]] && mark="*"
-                col2=$(printf "[%-2s] %-18s %s" "$c2" "${NAME[$c2]}" "$mark")
+                col2=$(printf "%s [%2s] %-18s" "$mark" "$c2" "${DISPLAY[$c2]}")
             fi
             if ((c3 <= count)); then
                 mark=" "
                 [[ "${SELECTED[$c3]}" -eq 1 ]] && mark="*"
-                col3=$(printf "[%-2s] %-18s %s" "$c3" "${NAME[$c3]}" "$mark")
+                col3=$(printf "%s [%2s] %-18s" "$mark" "$c3" "${DISPLAY[$c3]}")
             fi
             printf "                 %-26s%-26s%-26s\n" "$col1" "$col2" "$col3"
         done
