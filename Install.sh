@@ -111,29 +111,24 @@ init_pkg() {
     add_pkg "chromium"            "Chromium"
     add_pkg "google-chrome"       "Google Chrome"
 
-    # Media Players & Viewers
+    # Multimedia
     add_pkg "vlc"                 "VLC media player"
     add_pkg "mpv"                 "mpv"
-    add_pkg "qview"               "qView"
+    add_pkg "gthumb"              "GThumb"
+    add_pkg "viewnior"            "Viewnior"
 
-    # Office & Document Viewers
+    # Office
     add_pkg "okular"              "KDE Okular"
     add_pkg "onlyoffice-bin"      "OnlyOffice"
     add_pkg "libreoffice-fresh"   "LibreOffice"
 
-    # Archive & Compression Tools
-    add_pkg "7zip"                "7-Zip"
+    # Archive
     add_pkg "peazip"              "PeaZip"
 
-    # Downloaders & Network Tools
-    add_pkg "aria2"               "aria2"
-    add_pkg "yt-dlp"              "yt-dlp"
+    # Downloaders
     add_pkg "freedownloadmanager" "FDM"
-
-    # Code & Text Editors
-    add_pkg "code"                "VS Code"
-    add_pkg "neovim"              "Neovim"
-    add_pkg "micro"               "micro"
+    add_pkg "yt-dlp"              "yt-dlp"
+    add_pkg "media-downloader"
 
     # CLI File Managers, Search & Navigation Utilities
     add_pkg "ripgrep"             "ripgrep"
@@ -141,36 +136,38 @@ init_pkg() {
     add_pkg "fzf"                 "fzf"
     add_pkg "zoxide"              "zoxide"
     add_pkg "yazi"                "Yazi"
-
-    # Modern Terminal Substitutes & Utilities
     add_pkg "bat"                 "bat"
     add_pkg "eza"                 "eza"
     add_pkg "tree"                "Tree"
     add_pkg "tldr"                "tldr"
     add_pkg "navi"                "navi"
-    add_pkg "pacman-contrib"      "pacman-contrib"
 
     # System Monitoring, Power & Disk Analytics
-    add_pkg "btop"                "btop"
     add_pkg "duf"                 "duf"
     add_pkg "dust"                "dust"
-    add_pkg "powertop"            "PowerTOP"
-
-    # System Info & Benchmarking
+    add_pkg "btop"                "btop"
     add_pkg "fastfetch"           "Fastfetch"
-    add_pkg "hyperfine"           "hyperfine"
+    add_pkg "powertop"            "PowerTOP"
+    add_pkg "pacman-contrib"      "pacman-contrib"
 
-    # Version Control (Git Tools)
+    # Text Editors
+    add_pkg "code"                "VS Code"
+    add_pkg "neovim"              "Neovim"
+    add_pkg "micro"               "micro"
+
+    # Git Tools
     add_pkg "git"                 "Git"
     add_pkg "github-cli"          "GitHub CLI"
     add_pkg "sourcegit-bin"       "SourceGit"
 
-    # Base Development Tools
+    # Deve Tools
+    add_pkg "cmake"               "CMake"
+    add_pkg "make"                "GNU Make"
+    add_pkg "ninja"               "Ninja"
     add_pkg "base-devel"          "Base dev"
     add_pkg "clang"               "Clang"
-
-    # Debuggers, Static Analysis & Memory Profilers
     add_pkg "cppcheck"            "Cppcheck"
+    add_pkg "hyperfine"           "hyperfine"
 
     deselect_all_pkg
 }
