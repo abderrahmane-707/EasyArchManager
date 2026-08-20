@@ -285,30 +285,61 @@ update_menu() {
     deselect_all_pkg
 }
 
-remove_menu() {
-    clear
-    pacman -Qe || true
-    echo
-    echo "Type the exact package name(s) as shown above, separated by commas"
-    echo "Type 0 to go back"
-    read -rp "--> " choice || true
-
-    [[ -z "${choice:-}" ]] && return
-    [[ "$choice" == "0" ]] && return
-
-    local tokens="${choice//,/ }"
-    local to_remove=()
-    for pkg in $tokens; do
-        to_remove+=("$pkg")
-    done
-
-    if [[ ${#to_remove[@]} -gt 0 ]]; then
-        echo
-        echo "Removing the following packages:"
-        printf '    - %s\n' "${to_remove[@]}"
-        pkg_remove "${to_remove[@]}" || true
+ensure_fzf() {
+    if command -v fzf >/dev/null 2>&1; then
+        return 0
     fi
 
+    echo "fzf is required for interactive search but is not installed"
+    read -rp "Do you want to install it? [Y/n]: " ans || true
+    case "${ans,,}" in
+        y|yes|"")
+            if ! pkg_install "fzf"; then
+                echo "Failed to install fzf"
+                pause
+                return 1
+            fi
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
+    clear
+    return 0
+}
+
+remove_menu() {
+    clear
+
+    if ! ensure_fzf; then
+        return 1
+    fi
+
+    local installed_pkgs
+    installed_pkgs=$(pacman -Qeq || true)
+
+    if [[ -z "${installed_pkgs:-}" ]]; then
+        echo "No explicitly installed packages found"
+        pause
+        return
+    fi
+
+    local fzf_header="Press [TAB] for multi-select | Press [ENTER] to confirm | Press [ESC] to cancel"
+    local selected_apps
+    selected_apps=$(echo "$installed_pkgs" | fzf -m --prompt="Remove Package > " --header="$fzf_header" || true)
+
+    [[ -z "${selected_apps:-}" ]] && return 0
+
+    local to_remove=()
+    readarray -t to_remove <<< "$selected_apps"
+
+    echo
+    echo "Removing the following packages:"
+    printf '    - %s\n' "${to_remove[@]}"
+    echo
+
+    pkg_remove "${to_remove[@]}" || true
     go_done
     deselect_all_pkg
 }
@@ -316,25 +347,11 @@ remove_menu() {
 more_pkg() {
     clear
 
-    if ! command -v fzf >/dev/null 2>&1; then
-        echo "fzf is required for interactive search but is not installed"
-        read -rp "Do you want to install fzf? [Y/n]: " ans || true
-        case "${ans,,}" in
-            y|yes|"")
-                if ! pkg_install "fzf"; then
-                    echo "Failed to install fzf"
-                    pause
-                    return 1
-                fi
-                ;;
-            *)
-                return 1
-                ;;
-        esac
-        clear
+    if ! ensure_fzf; then
+        return 1
     fi
 
-    local fzf_header="Press [TAB] for multi-select | Press [ENTER] to confirm"
+    local fzf_header="Press [TAB] for multi-select | Press [ENTER] to confirm | Press [ESC] to cancel"
     local selected_apps
 
     if [[ "$PKG_MANAGER" == "yay" ]]; then
